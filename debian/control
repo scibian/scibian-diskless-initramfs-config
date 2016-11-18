@@ -1,0 +1,23 @@
+Source: scibian-diskless-initramfs-config
+Priority: optional
+Maintainer: Thomas HAMEL <thomas-externe.hamel@edf.fr>
+Build-Depends:
+ debhelper (>= 8)
+Standards-Version: 3.9.3
+Section: kernel
+
+Package: scibian-diskless-initramfs-config
+Architecture: all
+Depends:
+ ${misc:Depends},
+ initramfs-tools,
+ live-torrent,
+ live-boot,
+ mdadm,
+ parted,
+ rik-discovery-initramfs-tools
+Description: initramfs-config for Scibian diskless nodes
+ This package contains necessary configuration in order to build an
+ initramfs disk suitable for Scibian diskless nodes. This package is
+ not meant to be installed on nodes. It is used only during initrd's
+ generation inside a chrooted system.

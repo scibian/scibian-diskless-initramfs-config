@@ -1,0 +1,4 @@
+# Driver inclusion policy selected during installation
+# Note: this setting overrides the value set in the file
+# /etc/initramfs-tools/initramfs.conf
+MODULES=most

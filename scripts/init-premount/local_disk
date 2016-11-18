@@ -1,0 +1,107 @@
+#!/bin/sh
+# This script reads descriptions from the kernel command line
+# to initialize local disks
+#
+# disk_format is a list of device to partition and format
+# eg: disk_format=sda;sdb
+#
+# disk_raid is a list of raid arrays to initialize
+# device:level:disks
+# eg: md127:0:/dev/sda,/dev/sdb;md126:0:/dev/sdc,/dev/sdd
+
+PREREQ=""
+prereqs()
+{
+  echo "$PREREQ"
+}
+
+case $1 in
+  prereqs)
+    prereqs
+    exit 0
+  ;;
+esac
+
+. /scripts/functions
+
+
+# Optionaly read from an env var for debug purpose 
+if [ -n "${CMDLINE_DEBUG}" ]
+then
+	cmdline="${CMDLINE_DEBUG}"
+else
+	cmdline="$(cat /proc/cmdline)"
+fi
+
+disk_format=$(echo ${cmdline} | sed -n 's/.*[[:space:]]*disk-format=\([^[:space:]]*\)[[:space:]]*.*/\1/p')
+disk_raid=$(echo ${cmdline} | sed -n 's/.*[[:space:]]*disk-raid=\([^[:space:]]*\)[[:space:]]*.*/\1/p')
+
+
+
+log_begin_msg "Initialize local storage "
+modprobe -b sd_mod
+wait_for_udev 10
+sleep 5
+if [ -e /scripts/local-top/mdadm ]
+then
+  /scripts/local-top/mdadm
+else
+  log_warning_msg "Failed to find mdadm init script"
+fi
+log_end_msg "Initialize local storage "
+
+log_begin_msg "Configuring RAID"
+for raid_entry in $(echo "${disk_raid}" | tr ';' '\n')
+do
+	device="$(echo "${raid_entry}" | cut -d ':' -f 1)"
+	level="$(echo "${raid_entry}" | cut -d ':' -f 2)"
+	disks="$(echo "${raid_entry}" | cut -d ':' -f 3 | tr ',' ' ')"
+
+  echo "RAID Device ${device}, level=${level}, disks: ${disks} (${raid_entry})"
+	mdadm --stop /dev/${device}
+	mdadm --remove /dev/${device}
+	mdadm --zero-superblock ${disks}
+
+	for disk in ${disks}
+	do
+    echo "Wiping ${disk} $(ls -l ${disk})"
+    sleep 2
+    if [ -b ${disk} ] 
+    then
+		  dd if=/dev/zero of=${disk} bs=1M count=10
+    else
+      log_failure_msg "${disk} is not a block device"
+    fi
+	done
+
+	disk_count="$(echo $disks | wc -w)"
+	mdadm --create /dev/${device} --level=${level} --raid-devices=${disk_count} ${disks}
+done
+log_end_msg "RAID Configured"
+
+log_begin_msg "Formating disks"
+for disk in $(echo "${disk_format}" | tr ';' '\n')
+do
+	case  "$disk" in
+		md*)
+			partition_device="${disk}p1"
+			;;
+		*)
+			partition_device="${disk}1"
+			;;
+	esac
+	parted /dev/${disk} --script "mklabel gpt"
+	parted /dev/${disk} --script "mkpart primary ext4 2048s -1m"
+	partprobe
+        sleep 2
+	mkfs.ext4 -F "/dev/${partition_device}"
+        log_begin_msg "Labelling disk"
+        e2label /dev/${partition_device} tmp
+        log_end_msg "Label set"
+        log_begin_msg "Setting mode to 1777"
+        mount -t ext4 /dev/${partition_device} /tmp
+        chmod 1777 /tmp
+        umount /tmp
+        log_end_msg "Mode set"
+done
+log_end_msg "Disk formated"

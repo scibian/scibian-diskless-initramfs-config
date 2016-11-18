@@ -1,0 +1,41 @@
+#!/bin/sh
+
+PREREQ=""
+
+prereqs()
+{
+        echo "$PREREQ"
+}
+
+case $1 in
+# get pre-requisites
+prereqs)
+        prereqs
+        exit 0
+        ;;
+esac
+
+. /usr/share/initramfs-tools/hook-functions
+
+manual_add_modules      loop
+manual_add_modules      aufs
+manual_add_modules      squashfs
+
+# NFS
+manual_add_modules      dns_resolver
+manual_add_modules      nfs
+manual_add_modules      nfs_acl
+manual_add_modules      nfsd
+manual_add_modules      nfsv4
+
+# Efi stuff
+manual_add_modules      efi_pstore
+manual_add_modules      efivars
+
+# Network drivers
+manual_add_modules      igb
+manual_add_modules      tg3
+manual_add_modules      be2net
+
+copy_modules_dir        kernel/drivers/acpi
+
