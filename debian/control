@@ -1,10 +1,12 @@
 Source: scibian-diskless-initramfs-config
 Priority: optional
-Maintainer: Thomas HAMEL <thomas-externe.hamel@edf.fr>
+Maintainer: Scibian Project <packaging@scibian.org>
 Build-Depends:
  debhelper (>= 8)
 Standards-Version: 3.9.3
-Section: kernel
+Section: scibian
+Vcs-Git: https://github.com/scibian/scibian-diskless-initramfs-config.git
+Vcs-Browser: https://github.com/scibian/scibian-diskless-initramfs-config
 
 Package: scibian-diskless-initramfs-config
 Architecture: all
