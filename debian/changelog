@@ -1,3 +1,9 @@
+scibian-diskless-initramfs-config (5.3) scibian9; urgency=medium
+
+  * Scibian9 Release.
+
+ -- Thomas Hamel <thomas-externe.hamel@edf.fr>  Thu, 17 May 2018 16:05:42 +0200
+
 scibian-diskless-initramfs-config (5.2) scibian8; urgency=medium
 
   * Scibian8 rebuild.
