@@ -16,8 +16,7 @@ Depends:
  live-torrent,
  live-boot,
  mdadm,
- parted,
- rik-discovery-initramfs-tools
+ parted
 Description: initramfs-config for Scibian diskless nodes
  This package contains necessary configuration in order to build an
  initramfs disk suitable for Scibian diskless nodes. This package is
