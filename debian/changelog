@@ -1,3 +1,9 @@
+scibian-diskless-initramfs-config (5.4) scibian9; urgency=medium
+
+  * Remove rik-discovery-initramfs-tools dep
+
+ -- Thomas HAMEL <thomas-externe.hamel@edf.fr>  Fri, 18 May 2018 10:50:45 +0200
+
 scibian-diskless-initramfs-config (5.3) scibian9; urgency=medium
 
   * Scibian9 Release.
