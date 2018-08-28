@@ -1,3 +1,10 @@
+scibian-diskless-initramfs-config (5.5) scibian; urgency=medium
+
+  * Fix indentation on local_disk script
+  * Stop all raid volume before initializing disk
+
+ -- Thomas HAMEL <thomas-externe.hamel@edf.fr>  Tue, 28 Aug 2018 15:37:50 +0200
+
 scibian-diskless-initramfs-config (5.4) scibian9; urgency=medium
 
   * Remove rik-discovery-initramfs-tools dep
