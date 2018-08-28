@@ -49,6 +49,7 @@ fi
 log_end_msg "Initialize local storage "
 
 log_begin_msg "Configuring RAID"
+mdadm --stop --scan
 for raid_entry in $(echo "${disk_raid}" | tr ';' '\n')
 do
   device="$(echo "${raid_entry}" | cut -d ':' -f 1)"
