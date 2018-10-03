@@ -49,7 +49,7 @@ else
   log_warning_msg "Failed to find mdadm init script"
 fi
 log_end_msg "Initialize local storage "
-
+mdadm --stop --scan
 log_begin_msg "Configuring RAID"
 for raid_entry in $(echo "${disk_raid}" | tr ';' '\n')
 do
