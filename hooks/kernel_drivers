@@ -37,5 +37,8 @@ manual_add_modules      igb
 manual_add_modules      tg3
 manual_add_modules      be2net
 
+# Overlayfs drivers
+manual_add_modules      overlay
+
 copy_modules_dir        kernel/drivers/acpi
 
