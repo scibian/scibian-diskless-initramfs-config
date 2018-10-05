@@ -1,3 +1,9 @@
+scibian-diskless-initramfs-config (5.4) scibian8; urgency=medium
+
+  * add overlayfs module 
+
+ -- Nicolas Meaux <nicolas-externe.meaux@edf.fr>  Thu, 04 Oct 2018 13:36:04 +0200
+
 scibian-diskless-initramfs-config (5.3) scibian8; urgency=medium
 
   * Stop all raid volume before initializing disk
